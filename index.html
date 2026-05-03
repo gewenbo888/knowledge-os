@@ -1,0 +1,1729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knowledge OS — A Structured Operating System for Human Knowledge | 知识操作系统</title>
+
+<!-- SEO · GEO -->
+<meta name="description" content="Knowledge OS replaces linear learning with a structured, navigable system. Interactive knowledge graphs, multi-level explanations, cross-domain links, learning paths, and concept compression.">
+<meta name="keywords" content="knowledge graph, structured learning, knowledge management, learning paths, second brain, knowledge os, 知识图谱, 知识操作系统, 结构化学习">
+<meta name="author" content="Gewenbo">
+<link rel="canonical" href="https://knowledge-os.psyverse.fun/">
+<link rel="alternate" hreflang="en" href="https://knowledge-os.psyverse.fun/">
+<link rel="alternate" hreflang="zh-CN" href="https://knowledge-os.psyverse.fun/">
+<link rel="alternate" hreflang="x-default" href="https://knowledge-os.psyverse.fun/">
+<meta property="og:title" content="Knowledge OS — A Structured Operating System for Human Knowledge">
+<meta property="og:description" content="Replace linear learning with structured knowledge navigation. Graph, depth, links, paths, compression.">
+<meta property="og:url" content="https://knowledge-os.psyverse.fun/">
+<meta property="og:site_name" content="Psyverse">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Knowledge OS — A Structured Operating System for Human Knowledge">
+<meta name="twitter:description" content="Knowledge as an interactive system, not static content.">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0a0a0c">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Knowledge OS",
+  "description": "A structured operating system for human knowledge — graph navigation, multi-level explanations, cross-domain linking, learning paths, and compression.",
+  "url": "https://knowledge-os.psyverse.fun/",
+  "inLanguage": ["en", "zh-CN"],
+  "author": { "@type": "Person", "name": "Gewenbo", "url": "https://psyverse.fun/" },
+  "publisher": { "@type": "Organization", "name": "Psyverse", "url": "https://psyverse.fun/" }
+}
+</script>
+<!-- /SEO · GEO -->
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230a0a0c'/><circle cx='10' cy='10' r='2.4' fill='%2300f5d4'/><circle cx='22' cy='10' r='2.4' fill='%2300f5d4'/><circle cx='16' cy='22' r='2.4' fill='%23f4b400'/><path d='M10 10 L16 22 L22 10' stroke='%2300f5d4' stroke-width='1' fill='none' opacity='0.6'/></svg>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700;9..144,900&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500;600&family=Noto+Serif+SC:wght@400;700;900&display=swap" rel="stylesheet">
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0a0a0c;
+  --bg-2: #111114;
+  --bg-3: #16161a;
+  --line: #1f1f25;
+  --line-2: #2a2a32;
+  --ink: #f5f5f0;
+  --ink-dim: #a0a098;
+  --ink-faint: #5a5a58;
+  --teal: #00f5d4;
+  --teal-dim: #008b78;
+  --amber: #f4b400;
+  --amber-dim: #8a6500;
+  --magenta: #ff4d8d;
+  --serif: 'Fraunces', 'Noto Serif SC', Georgia, serif;
+  --serif-cn: 'Noto Serif SC', 'Fraunces', serif;
+  --mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --sans: 'IBM Plex Sans', system-ui, sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-weight: 300;
+  line-height: 1.55;
+  overflow-x: hidden;
+  font-feature-settings: "ss01", "ss02", "cv11";
+}
+
+/* Background grid */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 80px 80px;
+  opacity: 0.35;
+  z-index: -2;
+  pointer-events: none;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 800px 500px at 20% 10%, rgba(0,245,212,0.08), transparent 60%),
+    radial-gradient(ellipse 700px 400px at 90% 60%, rgba(244,180,0,0.06), transparent 60%);
+  z-index: -1;
+  pointer-events: none;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* TOP BAR */
+.bar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 32px;
+  backdrop-filter: blur(14px);
+  background: rgba(10,10,12,0.7);
+  border-bottom: 1px solid var(--line);
+}
+.bar-left { display: flex; align-items: center; gap: 14px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-dim); }
+.bar-logo {
+  width: 28px; height: 28px;
+  display: grid; place-items: center;
+  border: 1px solid var(--line-2);
+  background: var(--bg-2);
+  position: relative;
+}
+.bar-logo svg { width: 18px; height: 18px; }
+.bar-logo::after { content: ''; position: absolute; inset: -3px; border: 1px solid var(--teal); opacity: 0; transition: 0.3s; }
+.bar-logo:hover::after { opacity: 0.4; inset: -5px; }
+.bar-right { display: flex; align-items: center; gap: 24px; }
+.bar-nav { display: flex; gap: 22px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-dim); }
+.bar-nav a { transition: color 0.2s; }
+.bar-nav a:hover { color: var(--teal); }
+
+.lang-toggle {
+  display: flex;
+  border: 1px solid var(--line-2);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+}
+.lang-toggle button {
+  background: transparent;
+  color: var(--ink-dim);
+  border: none;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  transition: 0.2s;
+}
+.lang-toggle button.active {
+  background: var(--teal);
+  color: var(--bg);
+}
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 120px 32px 80px;
+  position: relative;
+}
+.hero-inner {
+  max-width: 1200px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.hero-spec {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--teal);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.hero-spec::before {
+  content: '';
+  width: 32px; height: 1px;
+  background: var(--teal);
+}
+
+h1.hero-title {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(48px, 6.5vw, 96px);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  margin-bottom: 32px;
+}
+h1.hero-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--teal);
+  position: relative;
+}
+h1.hero-title em::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: 6px;
+  height: 1px;
+  background: var(--teal);
+  opacity: 0.4;
+}
+
+.hero-sub {
+  font-size: 19px;
+  color: var(--ink-dim);
+  max-width: 560px;
+  margin-bottom: 48px;
+  line-height: 1.6;
+  font-weight: 300;
+}
+
+.hero-actions { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 14px 24px;
+  border: 1px solid var(--ink);
+  color: var(--ink);
+  background: transparent;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.btn:hover { background: var(--ink); color: var(--bg); }
+.btn-primary { background: var(--teal); color: var(--bg); border-color: var(--teal); }
+.btn-primary:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+/* Hero diagram */
+.hero-diagram {
+  aspect-ratio: 1;
+  position: relative;
+  border: 1px solid var(--line-2);
+  background:
+    radial-gradient(circle at center, rgba(0,245,212,0.04), transparent 70%),
+    var(--bg-2);
+}
+.hero-diagram-label {
+  position: absolute;
+  top: 12px; left: 12px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-faint);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.hero-diagram-coord {
+  position: absolute;
+  bottom: 12px; right: 12px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-faint);
+  letter-spacing: 0.05em;
+}
+
+/* SECTION */
+section {
+  padding: 140px 32px;
+  position: relative;
+}
+.section-inner { max-width: 1200px; margin: 0 auto; }
+
+.section-spec {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-faint);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.section-spec-dot {
+  width: 6px; height: 6px;
+  background: var(--teal);
+  border-radius: 50%;
+}
+
+.section-title {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(36px, 4.5vw, 64px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 24px;
+  max-width: 900px;
+}
+.section-title em { font-style: italic; color: var(--teal); }
+.section-lede {
+  font-size: 18px;
+  color: var(--ink-dim);
+  max-width: 720px;
+  margin-bottom: 64px;
+  line-height: 1.55;
+}
+
+/* PROBLEM SECTION */
+.compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+.compare-card {
+  padding: 48px;
+  background: var(--bg-2);
+  position: relative;
+  min-height: 380px;
+}
+.compare-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  display: inline-block;
+  padding: 4px 10px;
+}
+.compare-tag.bad { background: rgba(255,77,141,0.15); color: var(--magenta); }
+.compare-tag.good { background: rgba(0,245,212,0.15); color: var(--teal); }
+.compare-h {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 300;
+  line-height: 1.1;
+  margin-bottom: 20px;
+  letter-spacing: -0.01em;
+}
+.compare-p {
+  color: var(--ink-dim);
+  font-size: 15px;
+  line-height: 1.7;
+}
+.compare-vis {
+  margin-top: 32px;
+  height: 80px;
+  position: relative;
+}
+
+/* Linear visualization */
+.linear-vis {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 100%;
+}
+.linear-vis .step {
+  width: 28px; height: 28px;
+  background: var(--bg-3);
+  border: 1px solid var(--line-2);
+  display: grid;
+  place-items: center;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-faint);
+}
+.linear-vis .arrow {
+  flex: 1;
+  height: 1px;
+  background: var(--line-2);
+  position: relative;
+}
+.linear-vis .arrow::after {
+  content: '→';
+  position: absolute;
+  right: -4px; top: -8px;
+  color: var(--ink-faint);
+  font-size: 12px;
+}
+
+/* Graph visualization for "good" side */
+.graph-vis svg { width: 100%; height: 100%; }
+
+/* MODULE — KNOWLEDGE GRAPH */
+.module-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 48px;
+  margin-top: 48px;
+  align-items: stretch;
+}
+.module-canvas {
+  border: 1px solid var(--line-2);
+  background: var(--bg-2);
+  position: relative;
+  min-height: 480px;
+  overflow: hidden;
+}
+.module-canvas-label {
+  position: absolute;
+  top: 14px; left: 16px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-faint);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  z-index: 5;
+}
+.module-canvas svg { width: 100%; height: 100%; cursor: grab; }
+.module-canvas svg:active { cursor: grabbing; }
+
+.module-side {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: space-between;
+}
+.module-side-block {
+  border: 1px solid var(--line-2);
+  background: var(--bg-2);
+  padding: 24px;
+}
+.module-side-h {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 12px;
+}
+.module-side-p {
+  font-size: 14px;
+  color: var(--ink-dim);
+  line-height: 1.6;
+}
+
+#node-detail-name {
+  font-family: var(--serif);
+  font-size: 24px;
+  font-weight: 400;
+  margin-bottom: 8px;
+  color: var(--ink);
+}
+#node-detail-cat {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 16px;
+}
+#node-detail-desc {
+  font-size: 14px;
+  color: var(--ink-dim);
+  line-height: 1.6;
+}
+#node-detail-links {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-faint);
+}
+#node-detail-links span {
+  display: inline-block;
+  padding: 3px 8px;
+  margin: 2px 4px 2px 0;
+  border: 1px solid var(--line-2);
+  color: var(--ink-dim);
+  cursor: pointer;
+  transition: 0.2s;
+}
+#node-detail-links span:hover {
+  border-color: var(--teal);
+  color: var(--teal);
+}
+
+.legend {
+  display: flex;
+  gap: 18px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-dim);
+}
+.legend-dot {
+  display: inline-block;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+/* MODULE — DEPTH */
+.depth-controls {
+  display: flex;
+  gap: 0;
+  margin-bottom: 32px;
+  border: 1px solid var(--line-2);
+  background: var(--bg-2);
+  width: fit-content;
+  flex-wrap: wrap;
+}
+.depth-btn {
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--line-2);
+  color: var(--ink-dim);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 14px 22px;
+  cursor: pointer;
+  transition: 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 110px;
+}
+.depth-btn:last-child { border-right: none; }
+.depth-btn:hover { color: var(--ink); }
+.depth-btn.active {
+  background: var(--teal);
+  color: var(--bg);
+}
+.depth-btn .lvl {
+  font-size: 9px;
+  opacity: 0.6;
+  letter-spacing: 0.15em;
+}
+
+.depth-display {
+  border: 1px solid var(--line-2);
+  background: var(--bg-2);
+  padding: 48px;
+  min-height: 320px;
+  position: relative;
+}
+.depth-concept {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--teal);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.depth-text {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: 22px;
+  line-height: 1.55;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+  max-width: 820px;
+}
+.depth-text.is-formal {
+  font-family: var(--mono);
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--ink);
+  white-space: pre-wrap;
+}
+.depth-meta {
+  position: absolute;
+  bottom: 24px; right: 32px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-faint);
+  letter-spacing: 0.1em;
+}
+
+.depth-concept-picker {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.depth-pick {
+  background: var(--bg-2);
+  border: 1px solid var(--line-2);
+  color: var(--ink-dim);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.depth-pick:hover { border-color: var(--ink-dim); color: var(--ink); }
+.depth-pick.active { border-color: var(--teal); color: var(--teal); }
+
+/* MODULE — CROSS-DOMAIN */
+.cross-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  margin-bottom: 32px;
+}
+.cross-card {
+  background: var(--bg-2);
+  padding: 32px 24px;
+  position: relative;
+}
+.cross-card-domain {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 14px;
+}
+.cross-card-concept {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+.cross-card-desc {
+  font-size: 13px;
+  color: var(--ink-dim);
+  line-height: 1.55;
+}
+.cross-isomorphism {
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--amber);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 16px;
+  border: 1px dashed var(--amber-dim);
+  background: rgba(244,180,0,0.04);
+}
+
+.cross-pattern-picker {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+/* MODULE — PATHS */
+.paths-list {
+  display: grid;
+  gap: 16px;
+}
+.path-card {
+  border: 1px solid var(--line-2);
+  background: var(--bg-2);
+  padding: 24px 28px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 24px;
+  align-items: center;
+  transition: 0.2s;
+  cursor: pointer;
+}
+.path-card:hover { border-color: var(--teal); }
+.path-meta {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-faint);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.path-title {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 400;
+  margin-bottom: 8px;
+}
+.path-nodes {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink-dim);
+  letter-spacing: 0.02em;
+  word-break: break-word;
+}
+.path-stats {
+  text-align: right;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-faint);
+  letter-spacing: 0.05em;
+}
+.path-stats strong {
+  display: block;
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 300;
+  color: var(--teal);
+  margin-bottom: 4px;
+}
+
+/* MODULE — COMPRESSION */
+.compress-stack {
+  display: grid;
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+.compress-row {
+  background: var(--bg-2);
+  padding: 24px 32px;
+  display: grid;
+  grid-template-columns: 110px 1fr auto;
+  gap: 32px;
+  align-items: center;
+  transition: 0.2s;
+}
+.compress-row:hover { background: var(--bg-3); }
+.compress-zoom {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+.compress-content {
+  font-family: var(--serif);
+  font-weight: 300;
+  letter-spacing: -0.01em;
+}
+.compress-row[data-zoom="1"] .compress-content { font-size: 28px; line-height: 1.2; }
+.compress-row[data-zoom="2"] .compress-content { font-size: 22px; line-height: 1.3; }
+.compress-row[data-zoom="3"] .compress-content { font-size: 17px; line-height: 1.5; color: var(--ink-dim); font-family: var(--sans); font-weight: 300; }
+.compress-row[data-zoom="4"] .compress-content { font-size: 14px; line-height: 1.6; color: var(--ink-dim); font-family: var(--sans); font-weight: 300; }
+.compress-row[data-zoom="5"] .compress-content { font-size: 12px; line-height: 1.6; color: var(--ink-faint); font-family: var(--mono); }
+.compress-tokens {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-faint);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+/* MANIFESTO */
+.manifesto {
+  background:
+    linear-gradient(180deg, transparent, rgba(0,245,212,0.03), transparent),
+    var(--bg);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 160px 32px;
+}
+.manifesto-inner { max-width: 900px; margin: 0 auto; text-align: center; }
+.manifesto-spec {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--teal);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+}
+.manifesto-text {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(28px, 4vw, 48px);
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  margin-bottom: 32px;
+}
+.manifesto-text em { font-style: italic; color: var(--teal); }
+
+/* FOOTER */
+footer {
+  padding: 64px 32px 48px;
+  border-top: 1px solid var(--line);
+}
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  flex-wrap: wrap;
+  gap: 32px;
+}
+.footer-left {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-faint);
+  letter-spacing: 0.1em;
+  line-height: 1.8;
+}
+.footer-left strong { color: var(--ink-dim); }
+.footer-right {
+  font-family: var(--serif);
+  font-size: 14px;
+  color: var(--ink-faint);
+  text-align: right;
+}
+.footer-right a { color: var(--teal); transition: 0.2s; }
+.footer-right a:hover { opacity: 0.7; }
+
+/* CN font swap */
+[data-lang="zh"] body,
+[data-lang="zh"] .hero-sub,
+[data-lang="zh"] .section-lede,
+[data-lang="zh"] .compare-p,
+[data-lang="zh"] .module-side-p,
+[data-lang="zh"] #node-detail-desc,
+[data-lang="zh"] .cross-card-desc,
+[data-lang="zh"] .compare-h {
+  font-feature-settings: normal;
+}
+[data-lang="zh"] h1.hero-title,
+[data-lang="zh"] .section-title,
+[data-lang="zh"] .compare-h,
+[data-lang="zh"] .module-side .module-side-block,
+[data-lang="zh"] #node-detail-name,
+[data-lang="zh"] .cross-card-concept,
+[data-lang="zh"] .path-title,
+[data-lang="zh"] .manifesto-text,
+[data-lang="zh"] .depth-text:not(.is-formal),
+[data-lang="zh"] .compress-content {
+  font-family: var(--serif-cn);
+}
+
+/* RESPONSIVE */
+@media (max-width: 880px) {
+  .hero-inner { grid-template-columns: 1fr; gap: 48px; }
+  .module-grid { grid-template-columns: 1fr; }
+  .compare { grid-template-columns: 1fr; }
+  .cross-grid { grid-template-columns: 1fr; }
+  .compress-row { grid-template-columns: 1fr; gap: 12px; }
+  .bar { padding: 14px 18px; }
+  .bar-nav { display: none; }
+  section { padding: 100px 20px; }
+  .compare-card { padding: 32px 24px; }
+  .depth-display { padding: 32px 24px; }
+  .module-canvas { min-height: 380px; }
+  .path-card { grid-template-columns: 1fr; }
+  .path-stats { text-align: left; }
+}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="bar-left">
+    <a href="#" class="bar-logo" aria-label="Knowledge OS">
+      <svg viewBox="0 0 32 32" fill="none">
+        <circle cx="10" cy="10" r="2.4" fill="#00f5d4"/>
+        <circle cx="22" cy="10" r="2.4" fill="#00f5d4"/>
+        <circle cx="16" cy="22" r="2.4" fill="#f4b400"/>
+        <path d="M10 10 L16 22 L22 10" stroke="#00f5d4" stroke-width="1" opacity="0.6"/>
+      </svg>
+    </a>
+    <span data-i18n="bar.tag">Knowledge OS · v0.1</span>
+  </div>
+  <div class="bar-right">
+    <nav class="bar-nav">
+      <a href="#graph" data-i18n="nav.graph">Graph</a>
+      <a href="#depth" data-i18n="nav.depth">Depth</a>
+      <a href="#cross" data-i18n="nav.cross">Cross-domain</a>
+      <a href="#paths" data-i18n="nav.paths">Paths</a>
+      <a href="#compress" data-i18n="nav.compress">Compression</a>
+    </nav>
+    <div class="lang-toggle">
+      <button data-lang-btn="en" class="active">EN</button>
+      <button data-lang-btn="zh">中文</button>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-spec" data-i18n="hero.spec">Manifesto · Live Prototype · Open Source</div>
+      <h1 class="hero-title" data-i18n="hero.title" data-i18n-html="true">A structured operating system for <em>human knowledge</em>.</h1>
+      <p class="hero-sub" data-i18n="hero.sub">Linear textbooks, scrolling feeds, and 12-minute videos all hide the same problem: knowledge has shape — and we keep flattening it. Knowledge OS treats every concept as a node in a navigable graph, with depth, links, paths, and compression built in.</p>
+      <div class="hero-actions">
+        <a href="#graph" class="btn btn-primary"><span data-i18n="hero.cta1">Enter the system</span> →</a>
+        <a href="#manifesto" class="btn"><span data-i18n="hero.cta2">Read the manifesto</span></a>
+      </div>
+    </div>
+    <div class="hero-diagram" id="hero-diagram">
+      <div class="hero-diagram-label">FIG.00 — SEED GRAPH / 种子图</div>
+      <svg viewBox="0 0 400 400" id="hero-svg"></svg>
+      <div class="hero-diagram-coord">N₀ · 24 nodes · 41 edges</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section id="problem">
+  <div class="section-inner">
+    <div class="section-spec"><span class="section-spec-dot"></span><span data-i18n="problem.spec">§01 · The Problem</span></div>
+    <h2 class="section-title" data-i18n="problem.title" data-i18n-html="true">Most learning is <em>linear</em>. Most knowledge is not.</h2>
+    <p class="section-lede" data-i18n="problem.lede">A book has page 1 to page 400. A course has Lecture 1 to Lecture 24. But the actual map of what you're learning isn't a line — it's a graph. The line is just the projection someone chose for you.</p>
+
+    <div class="compare">
+      <div class="compare-card">
+        <span class="compare-tag bad" data-i18n="problem.bad.tag">LINEAR · 1D</span>
+        <h3 class="compare-h" data-i18n="problem.bad.h">Page → page → page → page</h3>
+        <p class="compare-p" data-i18n="problem.bad.p">You read in order. You can't see what's connected. You can't change depth. You can't jump domains. The author's path becomes your only path. When you get lost, you start over.</p>
+        <div class="compare-vis">
+          <div class="linear-vis">
+            <div class="step">P1</div><div class="arrow"></div>
+            <div class="step">P2</div><div class="arrow"></div>
+            <div class="step">P3</div><div class="arrow"></div>
+            <div class="step">P4</div><div class="arrow"></div>
+            <div class="step">P5</div><div class="arrow"></div>
+            <div class="step">…</div>
+          </div>
+        </div>
+      </div>
+      <div class="compare-card">
+        <span class="compare-tag good" data-i18n="problem.good.tag">STRUCTURED · ND</span>
+        <h3 class="compare-h" data-i18n="problem.good.h">Concept ↔ concept ↔ concept</h3>
+        <p class="compare-p" data-i18n="problem.good.p">You see the map. Every node has a depth dial, every edge is typed, every path is one of many. You can collapse a chapter into a sentence, or expand a sentence into a chapter. You navigate, not just read.</p>
+        <div class="compare-vis">
+          <svg viewBox="0 0 360 80" class="graph-vis">
+            <line x1="40" y1="40" x2="120" y2="20" stroke="#2a2a32" stroke-width="1"/>
+            <line x1="40" y1="40" x2="120" y2="60" stroke="#2a2a32" stroke-width="1"/>
+            <line x1="120" y1="20" x2="200" y2="40" stroke="#00f5d4" stroke-width="1"/>
+            <line x1="120" y1="60" x2="200" y2="40" stroke="#2a2a32" stroke-width="1"/>
+            <line x1="200" y1="40" x2="280" y2="20" stroke="#2a2a32" stroke-width="1"/>
+            <line x1="200" y1="40" x2="280" y2="60" stroke="#00f5d4" stroke-width="1"/>
+            <line x1="280" y1="20" x2="320" y2="40" stroke="#2a2a32" stroke-width="1"/>
+            <line x1="280" y1="60" x2="320" y2="40" stroke="#2a2a32" stroke-width="1"/>
+            <line x1="120" y1="20" x2="120" y2="60" stroke="#2a2a32" stroke-width="0.5" stroke-dasharray="2 2"/>
+            <line x1="280" y1="20" x2="280" y2="60" stroke="#2a2a32" stroke-width="0.5" stroke-dasharray="2 2"/>
+            <circle cx="40" cy="40" r="5" fill="#00f5d4"/>
+            <circle cx="120" cy="20" r="5" fill="#f5f5f0"/>
+            <circle cx="120" cy="60" r="5" fill="#f5f5f0"/>
+            <circle cx="200" cy="40" r="6" fill="#f4b400"/>
+            <circle cx="280" cy="20" r="5" fill="#f5f5f0"/>
+            <circle cx="280" cy="60" r="5" fill="#f5f5f0"/>
+            <circle cx="320" cy="40" r="5" fill="#00f5d4"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODULE 1: GRAPH -->
+<section id="graph">
+  <div class="section-inner">
+    <div class="section-spec"><span class="section-spec-dot"></span><span data-i18n="graph.spec">§02 · Module 01 — Knowledge Graph</span></div>
+    <h2 class="section-title" data-i18n="graph.title" data-i18n-html="true">Every concept is a <em>node</em>. Every relation is an <em>edge</em>.</h2>
+    <p class="section-lede" data-i18n="graph.lede">Click a node to load it. Watch the neighborhood update. The graph below is a 24-concept seed slice across math, physics, computation, and philosophy — drag, click, explore.</p>
+
+    <div class="legend">
+      <span><span class="legend-dot" style="background:#00f5d4"></span><span data-i18n="graph.legend.math">Math</span></span>
+      <span><span class="legend-dot" style="background:#f4b400"></span><span data-i18n="graph.legend.physics">Physics</span></span>
+      <span><span class="legend-dot" style="background:#ff4d8d"></span><span data-i18n="graph.legend.cs">Computation</span></span>
+      <span><span class="legend-dot" style="background:#a0a098"></span><span data-i18n="graph.legend.phil">Philosophy</span></span>
+    </div>
+
+    <div class="module-grid">
+      <div class="module-canvas">
+        <div class="module-canvas-label">FIG.01 — SEED CORPUS / 种子语料 · drag · click</div>
+        <svg viewBox="0 0 800 520" id="graph-svg" preserveAspectRatio="xMidYMid meet"></svg>
+      </div>
+      <div class="module-side">
+        <div class="module-side-block">
+          <div id="node-detail-cat" data-i18n="graph.detail.cat">— SELECT NODE —</div>
+          <div id="node-detail-name" data-i18n="graph.detail.name">Click any concept</div>
+          <div id="node-detail-desc" data-i18n="graph.detail.desc">The graph is the canonical surface of Knowledge OS. Each node has a category, a depth axis, and a typed neighborhood — meaning every click reveals what is *adjacent* in concept-space, not in page-space.</div>
+          <div id="node-detail-links"></div>
+        </div>
+        <div class="module-side-block">
+          <div class="module-side-h" data-i18n="graph.spec.h">SPECIFICATION</div>
+          <div class="module-side-p" data-i18n="graph.spec.p">Force-directed layout · typed edges (prerequisite, instance-of, dual, analogy) · depth-1 default render, depth-N on demand.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODULE 2: DEPTH -->
+<section id="depth">
+  <div class="section-inner">
+    <div class="section-spec"><span class="section-spec-dot"></span><span data-i18n="depth.spec">§03 · Module 02 — Multi-Level Explanations</span></div>
+    <h2 class="section-title" data-i18n="depth.title" data-i18n-html="true">One concept. <em>Five depths.</em> You choose.</h2>
+    <p class="section-lede" data-i18n="depth.lede">A child needs a metaphor. A student needs an example. A practitioner needs a definition. A researcher needs the formalism. The same concept should serve all of them — at the turn of a dial.</p>
+
+    <div class="depth-concept-picker" id="depth-concept-picker"></div>
+
+    <div class="depth-controls" id="depth-controls">
+      <button class="depth-btn" data-depth="0"><span class="lvl">L0</span><span data-i18n="depth.l0">Child</span></button>
+      <button class="depth-btn active" data-depth="1"><span class="lvl">L1</span><span data-i18n="depth.l1">Curious</span></button>
+      <button class="depth-btn" data-depth="2"><span class="lvl">L2</span><span data-i18n="depth.l2">Student</span></button>
+      <button class="depth-btn" data-depth="3"><span class="lvl">L3</span><span data-i18n="depth.l3">Practitioner</span></button>
+      <button class="depth-btn" data-depth="4"><span class="lvl">L4</span><span data-i18n="depth.l4">Researcher</span></button>
+    </div>
+
+    <div class="depth-display">
+      <div class="depth-concept" id="depth-concept-name">ENTROPY · 熵</div>
+      <div class="depth-text" id="depth-text"></div>
+      <div class="depth-meta" id="depth-meta"></div>
+    </div>
+  </div>
+</section>
+
+<!-- MODULE 3: CROSS-DOMAIN -->
+<section id="cross">
+  <div class="section-inner">
+    <div class="section-spec"><span class="section-spec-dot"></span><span data-i18n="cross.spec">§04 · Module 03 — Cross-Domain Linking</span></div>
+    <h2 class="section-title" data-i18n="cross.title" data-i18n-html="true">The same <em>shape</em> appears in different fields.</h2>
+    <p class="section-lede" data-i18n="cross.lede">Most "new ideas" are old patterns crossing borders. Knowledge OS makes the bridges first-class — when you understand a concept, you also see its isomorphisms in adjacent domains.</p>
+
+    <div class="cross-pattern-picker" id="cross-pattern-picker"></div>
+    <div class="cross-grid" id="cross-grid"></div>
+    <div class="cross-isomorphism" id="cross-isomorphism"></div>
+  </div>
+</section>
+
+<!-- MODULE 4: PATHS -->
+<section id="paths">
+  <div class="section-inner">
+    <div class="section-spec"><span class="section-spec-dot"></span><span data-i18n="paths.spec">§05 · Module 04 — Learning Paths</span></div>
+    <h2 class="section-title" data-i18n="paths.title" data-i18n-html="true">A path is a <em>traversal</em> of the graph — pick yours.</h2>
+    <p class="section-lede" data-i18n="paths.lede">A textbook is one path through the graph. A course is another. Knowledge OS lets you choose, fork, or build paths — optimized for your goal, not the publisher's table of contents.</p>
+    <div class="paths-list" id="paths-list"></div>
+  </div>
+</section>
+
+<!-- MODULE 5: COMPRESSION -->
+<section id="compress">
+  <div class="section-inner">
+    <div class="section-spec"><span class="section-spec-dot"></span><span data-i18n="compress.spec">§06 · Module 05 — Compression & Expansion</span></div>
+    <h2 class="section-title" data-i18n="compress.title" data-i18n-html="true">Zoom out for the <em>shape</em>. Zoom in for the <em>steps</em>.</h2>
+    <p class="section-lede" data-i18n="compress.lede">Same content, five resolutions: tweet → paragraph → page → chapter → formal proof. The reader picks resolution; the system maintains coherence across all of them.</p>
+
+    <div class="compress-stack" id="compress-stack"></div>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section class="manifesto" id="manifesto">
+  <div class="manifesto-inner">
+    <div class="manifesto-spec" data-i18n="manifest.spec">§07 · Manifesto</div>
+    <p class="manifesto-text" data-i18n="manifest.text" data-i18n-html="true">The next century of learning will not be longer videos or thicker books. It will be <em>navigable, structured, multi-resolution</em> knowledge — the same content, every depth, every link, every path, on demand.</p>
+    <div class="manifesto-spec" style="margin-top: 48px;" data-i18n="manifest.signoff">— Knowledge OS · An open prototype</div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-left">
+      <strong>KNOWLEDGE OS</strong> · v0.1 PROTOTYPE<br>
+      <span data-i18n="footer.tag">A structured OS for human knowledge · 知识操作系统</span><br>
+      © 2026 GEWENBO · <a href="https://psyverse.fun" style="color:var(--teal)">PSYVERSE.FUN</a>
+    </div>
+    <div class="footer-right">
+      <span data-i18n="footer.cta">Part of the </span><a href="https://psyverse.fun">Psyverse</a> portfolio.
+    </div>
+  </div>
+</footer>
+
+<!-- Analytics -->
+<script src="https://analytics-dashboard-two-blue.vercel.app/tracker.js" defer></script>
+
+<script>
+// ============== I18N ==============
+const I18N = {
+  en: {
+    "bar.tag": "Knowledge OS · v0.1",
+    "nav.graph": "Graph", "nav.depth": "Depth", "nav.cross": "Cross-domain", "nav.paths": "Paths", "nav.compress": "Compression",
+    "hero.spec": "Manifesto · Live Prototype · Open Source",
+    "hero.title": "A structured operating system for <em>human knowledge</em>.",
+    "hero.sub": "Linear textbooks, scrolling feeds, and 12-minute videos all hide the same problem: knowledge has shape — and we keep flattening it. Knowledge OS treats every concept as a node in a navigable graph, with depth, links, paths, and compression built in.",
+    "hero.cta1": "Enter the system", "hero.cta2": "Read the manifesto",
+
+    "problem.spec": "§01 · The Problem",
+    "problem.title": "Most learning is <em>linear</em>. Most knowledge is not.",
+    "problem.lede": "A book has page 1 to page 400. A course has Lecture 1 to Lecture 24. But the actual map of what you're learning isn't a line — it's a graph. The line is just the projection someone chose for you.",
+    "problem.bad.tag": "LINEAR · 1D",
+    "problem.bad.h": "Page → page → page → page",
+    "problem.bad.p": "You read in order. You can't see what's connected. You can't change depth. You can't jump domains. The author's path becomes your only path. When you get lost, you start over.",
+    "problem.good.tag": "STRUCTURED · ND",
+    "problem.good.h": "Concept ↔ concept ↔ concept",
+    "problem.good.p": "You see the map. Every node has a depth dial, every edge is typed, every path is one of many. You can collapse a chapter into a sentence, or expand a sentence into a chapter. You navigate, not just read.",
+
+    "graph.spec": "§02 · Module 01 — Knowledge Graph",
+    "graph.title": "Every concept is a <em>node</em>. Every relation is an <em>edge</em>.",
+    "graph.lede": "Click a node to load it. Watch the neighborhood update. The graph below is a 24-concept seed slice across math, physics, computation, and philosophy — drag, click, explore.",
+    "graph.legend.math": "Math", "graph.legend.physics": "Physics", "graph.legend.cs": "Computation", "graph.legend.phil": "Philosophy",
+    "graph.detail.cat": "— SELECT NODE —",
+    "graph.detail.name": "Click any concept",
+    "graph.detail.desc": "The graph is the canonical surface of Knowledge OS. Each node has a category, a depth axis, and a typed neighborhood — meaning every click reveals what is *adjacent* in concept-space, not in page-space.",
+    "graph.spec.h": "SPECIFICATION",
+    "graph.spec.p": "Force-directed layout · typed edges (prerequisite, instance-of, dual, analogy) · depth-1 default render, depth-N on demand.",
+
+    "depth.spec": "§03 · Module 02 — Multi-Level Explanations",
+    "depth.title": "One concept. <em>Five depths.</em> You choose.",
+    "depth.lede": "A child needs a metaphor. A student needs an example. A practitioner needs a definition. A researcher needs the formalism. The same concept should serve all of them — at the turn of a dial.",
+    "depth.l0": "Child", "depth.l1": "Curious", "depth.l2": "Student", "depth.l3": "Practitioner", "depth.l4": "Researcher",
+
+    "cross.spec": "§04 · Module 03 — Cross-Domain Linking",
+    "cross.title": "The same <em>shape</em> appears in different fields.",
+    "cross.lede": "Most \"new ideas\" are old patterns crossing borders. Knowledge OS makes the bridges first-class — when you understand a concept, you also see its isomorphisms in adjacent domains.",
+
+    "paths.spec": "§05 · Module 04 — Learning Paths",
+    "paths.title": "A path is a <em>traversal</em> of the graph — pick yours.",
+    "paths.lede": "A textbook is one path through the graph. A course is another. Knowledge OS lets you choose, fork, or build paths — optimized for your goal, not the publisher's table of contents.",
+
+    "compress.spec": "§06 · Module 05 — Compression & Expansion",
+    "compress.title": "Zoom out for the <em>shape</em>. Zoom in for the <em>steps</em>.",
+    "compress.lede": "Same content, five resolutions: tweet → paragraph → page → chapter → formal proof. The reader picks resolution; the system maintains coherence across all of them.",
+
+    "manifest.spec": "§07 · Manifesto",
+    "manifest.text": "The next century of learning will not be longer videos or thicker books. It will be <em>navigable, structured, multi-resolution</em> knowledge — the same content, every depth, every link, every path, on demand.",
+    "manifest.signoff": "— Knowledge OS · An open prototype",
+
+    "footer.tag": "A structured OS for human knowledge · 知识操作系统",
+    "footer.cta": "Part of the "
+  },
+  zh: {
+    "bar.tag": "知识操作系统 · v0.1",
+    "nav.graph": "知识图谱", "nav.depth": "深度切换", "nav.cross": "跨领域", "nav.paths": "学习路径", "nav.compress": "压缩展开",
+    "hero.spec": "宣言 · 在线原型 · 开源构建",
+    "hero.title": "为<em>人类知识</em>构建的结构化操作系统。",
+    "hero.sub": "线性教材、刷不完的信息流、12分钟解说视频，都在掩盖同一个问题：知识本身是有结构的，而我们一直在把它压成一条线。知识操作系统把每个概念看作可导航图谱中的节点，原生支持深度、链接、路径与压缩。",
+    "hero.cta1": "进入系统", "hero.cta2": "阅读宣言",
+
+    "problem.spec": "§01 · 问题",
+    "problem.title": "学习大多是<em>线性的</em>。但知识本身不是。",
+    "problem.lede": "一本书从第1页排到第400页，一门课从第1讲排到第24讲。但你正在学的东西真正的地图不是一条线——它是一张图。线，只是别人替你选的一种投影。",
+    "problem.bad.tag": "线性 · 一维",
+    "problem.bad.h": "页 → 页 → 页 → 页",
+    "problem.bad.p": "你按顺序读，看不见什么和什么相关，无法切换深度，也无法跨域跳转。作者的路径变成你唯一的路径。一旦走丢，只能从头再来。",
+    "problem.good.tag": "结构化 · 多维",
+    "problem.good.h": "概念 ↔ 概念 ↔ 概念",
+    "problem.good.p": "你能看见整张地图。每个节点都有深度旋钮，每条边都有类型，每条路径都只是众多路径中的一条。你可以把一章压成一句，也可以把一句展成一章。你在导航，而不只是在读。",
+
+    "graph.spec": "§02 · 模块01 — 知识图谱",
+    "graph.title": "每个概念是<em>节点</em>。每条关系是<em>边</em>。",
+    "graph.lede": "点击节点加载它，看邻域如何更新。下方是一张24个概念的种子图，覆盖数学、物理、计算与哲学——拖拽、点击、探索。",
+    "graph.legend.math": "数学", "graph.legend.physics": "物理", "graph.legend.cs": "计算", "graph.legend.phil": "哲学",
+    "graph.detail.cat": "— 选择节点 —",
+    "graph.detail.name": "点击任意概念",
+    "graph.detail.desc": "图谱是知识操作系统的核心界面。每个节点都有类别、深度轴和带类型的邻域——每次点击揭示的是概念空间里的相邻概念，而不是页码空间里的相邻页码。",
+    "graph.spec.h": "规格",
+    "graph.spec.p": "力导向布局 · 带类型的边（前置、实例、对偶、类比）· 默认渲染深度1，按需展开至深度N。",
+
+    "depth.spec": "§03 · 模块02 — 多层解释",
+    "depth.title": "同一个概念。<em>五种深度。</em>你来选。",
+    "depth.lede": "孩子需要比喻，学生需要例子，从业者需要定义，研究者需要形式化。同一个概念应该服务所有人——只需拨动一下深度旋钮。",
+    "depth.l0": "儿童", "depth.l1": "好奇", "depth.l2": "学生", "depth.l3": "从业", "depth.l4": "研究",
+
+    "cross.spec": "§04 · 模块03 — 跨域链接",
+    "cross.title": "同样的<em>结构</em>会出现在不同领域。",
+    "cross.lede": "大多数\"新想法\"其实是旧模式越过了学科边界。知识操作系统把这些桥梁变成一等公民——当你理解一个概念，你也同时看见它在相邻领域中的同构。",
+
+    "paths.spec": "§05 · 模块04 — 学习路径",
+    "paths.title": "路径是图上的一次<em>遍历</em>——选你想走的。",
+    "paths.lede": "一本教材是图上的一条路径，一门课是另一条。知识操作系统让你选择、分叉、构造路径——为你的目标优化，而不是为出版社的目录优化。",
+
+    "compress.spec": "§06 · 模块05 — 压缩与展开",
+    "compress.title": "拉远看<em>形状</em>。拉近看<em>步骤</em>。",
+    "compress.lede": "同一份内容，五种分辨率：推文 → 段落 → 页 → 章节 → 形式化证明。读者选择分辨率，系统在所有层级之间维持一致性。",
+
+    "manifest.spec": "§07 · 宣言",
+    "manifest.text": "下一个世纪的学习，不会是更长的视频或更厚的书。它会是<em>可导航、结构化、多分辨率</em>的知识——同一份内容，所有深度、所有链接、所有路径，按需呈现。",
+    "manifest.signoff": "— 知识操作系统 · 开放原型",
+
+    "footer.tag": "面向人类知识的结构化操作系统 · Knowledge OS",
+    "footer.cta": "属于 "
+  }
+};
+
+let currentLang = 'en';
+
+function applyLang(lang) {
+  currentLang = lang;
+  document.documentElement.lang = (lang === 'zh' ? 'zh-CN' : 'en');
+  document.documentElement.setAttribute('data-lang', lang);
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    const html = el.getAttribute('data-i18n-html');
+    const text = (I18N[lang] && I18N[lang][key]) || (I18N.en[key] || '');
+    if (html === 'true') el.innerHTML = text;
+    else el.textContent = text;
+  });
+  document.querySelectorAll('[data-lang-btn]').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('data-lang-btn') === lang);
+  });
+  // Re-render dynamic content in new lang
+  renderDepth();
+  renderCross();
+  renderPaths();
+  renderCompress();
+  if (currentNodeId) showNode(currentNodeId);
+}
+
+document.querySelectorAll('[data-lang-btn]').forEach(b => {
+  b.addEventListener('click', () => applyLang(b.getAttribute('data-lang-btn')));
+});
+
+// ============== HERO MINI GRAPH ==============
+(function heroGraph() {
+  const svg = document.getElementById('hero-svg');
+  const W = 400, H = 400;
+  const nodes = [];
+  const edges = [];
+  // Generate seed
+  const N = 16;
+  for (let i = 0; i < N; i++) {
+    const ring = i < 1 ? 0 : (i < 7 ? 1 : 2);
+    const angle = (i / Math.max(1, ring === 0 ? 1 : (ring === 1 ? 6 : 9))) * Math.PI * 2;
+    const r = ring * 110;
+    nodes.push({
+      x: 200 + Math.cos(angle) * r,
+      y: 200 + Math.sin(angle) * r,
+      ring,
+      kind: ring === 0 ? 'center' : (Math.random() > 0.5 ? 'a' : 'b')
+    });
+  }
+  for (let i = 1; i < N; i++) {
+    const ring = nodes[i].ring;
+    if (ring === 1) edges.push([0, i]);
+    if (ring === 2) {
+      const candidates = nodes.map((_, j) => j).filter(j => nodes[j].ring === 1);
+      const pick = candidates[Math.floor(Math.random() * candidates.length)];
+      edges.push([pick, i]);
+      if (Math.random() > 0.6) {
+        const pick2 = candidates[Math.floor(Math.random() * candidates.length)];
+        if (pick2 !== pick) edges.push([pick2, i]);
+      }
+    }
+  }
+  // Render
+  let svgContent = '';
+  edges.forEach(([a, b]) => {
+    svgContent += `<line x1="${nodes[a].x}" y1="${nodes[a].y}" x2="${nodes[b].x}" y2="${nodes[b].y}" stroke="#2a2a32" stroke-width="0.7"/>`;
+  });
+  nodes.forEach((n, i) => {
+    const color = n.ring === 0 ? '#f4b400' : (n.kind === 'a' ? '#00f5d4' : '#f5f5f0');
+    const r = n.ring === 0 ? 7 : (n.ring === 1 ? 5 : 4);
+    svgContent += `<circle cx="${n.x}" cy="${n.y}" r="${r}" fill="${color}" opacity="${n.ring === 2 ? 0.6 : 1}"/>`;
+  });
+  // Pulse on center
+  svgContent += `<circle cx="200" cy="200" r="14" fill="none" stroke="#f4b400" stroke-width="1" opacity="0.4">
+    <animate attributeName="r" values="10;30;10" dur="3s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.5;0;0.5" dur="3s" repeatCount="indefinite"/>
+  </circle>`;
+  svg.innerHTML = svgContent;
+})();
+
+// ============== MAIN GRAPH (Module 1) ==============
+const GRAPH_NODES = {
+  // Math
+  set:        { en: 'Set',                zh: '集合',           cat: 'math',     desc: { en: 'A collection of distinct objects, considered as a single object. The atom of structural mathematics.', zh: '不同对象的聚合，被视作一个整体。结构数学的原子。' } },
+  function:   { en: 'Function',           zh: '函数',           cat: 'math',     desc: { en: 'A rule mapping each element of one set to exactly one element of another. Pure dependency.', zh: '把一个集合中的每个元素映射到另一个集合中唯一元素的规则。纯粹的依赖关系。' } },
+  group:      { en: 'Group',              zh: '群',             cat: 'math',     desc: { en: 'A set with one operation that satisfies closure, identity, inverse, associativity. Symmetry made algebraic.', zh: '配有一种运算的集合，满足封闭、单位元、逆元与结合律。对称性的代数化。' } },
+  topology:   { en: 'Topology',           zh: '拓扑',           cat: 'math',     desc: { en: 'The study of properties preserved under continuous deformation. Geometry without distance.', zh: '研究在连续形变下保持不变的性质。没有距离的几何。' } },
+  category:   { en: 'Category',           zh: '范畴',           cat: 'math',     desc: { en: 'Objects + arrows + composition. The grammar of mathematical structure itself.', zh: '对象 + 箭头 + 复合。数学结构本身的语法。' } },
+  prob:       { en: 'Probability',        zh: '概率',           cat: 'math',     desc: { en: 'A measure on outcomes. Quantified uncertainty, normalized to one.', zh: '在结果上的一种测度。被量化的不确定性，归一化为1。' } },
+
+  // Physics
+  entropy:    { en: 'Entropy',            zh: '熵',             cat: 'physics',  desc: { en: 'A measure of how many micro-arrangements give the same macro-state. The arrow of time.', zh: '衡量同一宏观态对应多少微观排列方式。时间之箭。' } },
+  symmetry:   { en: 'Symmetry',           zh: '对称性',         cat: 'physics',  desc: { en: 'Invariance under transformation. Where there is symmetry, there is a conservation law (Noether).', zh: '在变换下保持不变。哪里有对称，哪里就有守恒律（诺特）。' } },
+  field:      { en: 'Field',              zh: '场',             cat: 'physics',  desc: { en: 'A value at every point in space. The substrate that carries forces and particles.', zh: '空间每一点上的值。承载力与粒子的基底。' } },
+  energy:     { en: 'Energy',             zh: '能量',           cat: 'physics',  desc: { en: 'The conserved quantity associated with time-translation symmetry. The bookkeeping of physics.', zh: '与时间平移对称性相对应的守恒量。物理学的记账单位。' } },
+  thermo:     { en: 'Thermodynamics',     zh: '热力学',         cat: 'physics',  desc: { en: 'The macroscopic laws of energy, entropy, and temperature. Engines, life, and heat death.', zh: '能量、熵与温度的宏观定律。引擎、生命与热寂。' } },
+
+  // Computation
+  algo:       { en: 'Algorithm',          zh: '算法',           cat: 'cs',       desc: { en: 'A finite sequence of unambiguous steps that solves a class of problems.', zh: '解决一类问题的有限、明确步骤序列。' } },
+  graph_ds:   { en: 'Graph (DS)',         zh: '图（数据结构）', cat: 'cs',       desc: { en: 'Nodes connected by edges. The most expressive data structure for relations.', zh: '通过边相连的节点集合。表达关系的最强数据结构。' } },
+  complexity: { en: 'Complexity',         zh: '复杂度',         cat: 'cs',       desc: { en: 'How resource cost scales with input size. The map of what is feasible.', zh: '资源消耗如何随输入规模扩张。可行性的地图。' } },
+  turing:     { en: 'Turing Machine',     zh: '图灵机',         cat: 'cs',       desc: { en: 'A minimal abstract computer with a tape, head, and rules. The definition of computability.', zh: '由纸带、读写头与规则构成的最小抽象计算机。可计算性的定义。' } },
+  info:       { en: 'Information',        zh: '信息',           cat: 'cs',       desc: { en: 'Reduction in uncertainty, measured in bits. The currency of communication.', zh: '不确定性的减少，以比特度量。通信的货币。' } },
+  ml:         { en: 'Machine Learning',   zh: '机器学习',       cat: 'cs',       desc: { en: 'Algorithms that improve with data instead of explicit rules. Pattern extraction at scale.', zh: '依靠数据而非显式规则改进自身的算法。规模化的模式提取。' } },
+  recursion:  { en: 'Recursion',          zh: '递归',           cat: 'cs',       desc: { en: 'A function defined in terms of itself. The shortest path to infinite structure.', zh: '一个用自己定义自己的函数。通往无限结构的最短路径。' } },
+
+  // Philosophy
+  causation:  { en: 'Causation',          zh: '因果',           cat: 'phil',     desc: { en: 'The relation by which one event brings about another. The hardest concept in metaphysics.', zh: '一件事引起另一件事的关系。形而上学中最难的概念。' } },
+  emergence:  { en: 'Emergence',          zh: '涌现',           cat: 'phil',     desc: { en: 'High-level properties not reducible to low-level parts. Wholes greater than sums.', zh: '不可被低层部件还原的高层性质。整体大于部分之和。' } },
+  reductionism: { en: 'Reductionism',     zh: '还原论',         cat: 'phil',     desc: { en: 'The thesis that complex systems are explained fully by their components. The opposite shore of emergence.', zh: '认为复杂系统可由其组成部分完全解释的立场。涌现的对岸。' } },
+  truth:      { en: 'Truth',              zh: '真',             cat: 'phil',     desc: { en: 'The property of statements that correspond, cohere, or work. Three rival theories, one word.', zh: '陈述与现实对应、与体系一致或在实践中有效的性质。三种对立理论，一个词。' } },
+  knowledge:  { en: 'Knowledge',          zh: '知识',           cat: 'phil',     desc: { en: 'Justified true belief. Or maybe more — the Gettier problem still bites.', zh: '被辩护的真信念。或许还不够——盖梯尔问题仍然有效。' } },
+  consciousness: { en: 'Consciousness',   zh: '意识',           cat: 'phil',     desc: { en: 'The fact that there is something it is like to be you. The hard problem.', zh: '"成为你"这件事本身有某种主观感受。意识的难问题。' } }
+};
+
+const GRAPH_EDGES = [
+  ['set','function'], ['set','group'], ['set','prob'], ['set','topology'], ['set','category'],
+  ['function','category'], ['function','algo'], ['group','symmetry'], ['group','category'],
+  ['topology','field'], ['symmetry','field'], ['symmetry','energy'], ['energy','thermo'],
+  ['entropy','thermo'], ['entropy','info'], ['prob','info'], ['prob','ml'],
+  ['algo','complexity'], ['algo','turing'], ['turing','complexity'], ['algo','graph_ds'],
+  ['graph_ds','recursion'], ['recursion','algo'], ['ml','info'], ['ml','prob'],
+  ['causation','emergence'], ['emergence','reductionism'], ['reductionism','causation'],
+  ['knowledge','truth'], ['knowledge','consciousness'], ['truth','causation'],
+  ['emergence','thermo'], ['emergence','consciousness'],
+  ['info','knowledge'], ['turing','consciousness'], ['ml','knowledge'],
+  ['category','symmetry'], ['topology','symmetry'], ['recursion','consciousness']
+];
+
+const CAT_COLORS = { math: '#00f5d4', physics: '#f4b400', cs: '#ff4d8d', phil: '#a0a098' };
+const CAT_LABEL = {
+  math:    { en: 'MATHEMATICS',  zh: '数学' },
+  physics: { en: 'PHYSICS',      zh: '物理' },
+  cs:      { en: 'COMPUTATION',  zh: '计算' },
+  phil:    { en: 'PHILOSOPHY',   zh: '哲学' }
+};
+
+let currentNodeId = null;
+
+(function buildGraph() {
+  const svg = document.getElementById('graph-svg');
+  const W = 800, H = 520;
+  const ids = Object.keys(GRAPH_NODES);
+
+  // Initialize positions
+  const positions = {};
+  ids.forEach((id, i) => {
+    const a = (i / ids.length) * Math.PI * 2;
+    positions[id] = {
+      x: W/2 + Math.cos(a) * 200 + (Math.random() - 0.5) * 60,
+      y: H/2 + Math.sin(a) * 160 + (Math.random() - 0.5) * 60,
+      vx: 0, vy: 0
+    };
+  });
+
+  // Force simulation
+  function simulate() {
+    for (let iter = 0; iter < 220; iter++) {
+      // Repulsion
+      for (let i = 0; i < ids.length; i++) {
+        for (let j = i + 1; j < ids.length; j++) {
+          const a = positions[ids[i]], b = positions[ids[j]];
+          const dx = b.x - a.x, dy = b.y - a.y;
+          const d2 = dx*dx + dy*dy + 0.01;
+          const f = 1800 / d2;
+          const d = Math.sqrt(d2);
+          const fx = (dx/d) * f, fy = (dy/d) * f;
+          a.vx -= fx; a.vy -= fy;
+          b.vx += fx; b.vy += fy;
+        }
+      }
+      // Edge spring
+      GRAPH_EDGES.forEach(([a, b]) => {
+        const pa = positions[a], pb = positions[b];
+        const dx = pb.x - pa.x, dy = pb.y - pa.y;
+        const d = Math.sqrt(dx*dx + dy*dy) + 0.01;
+        const f = (d - 110) * 0.04;
+        const fx = (dx/d) * f, fy = (dy/d) * f;
+        pa.vx += fx; pa.vy += fy;
+        pb.vx -= fx; pb.vy -= fy;
+      });
+      // Center pull
+      ids.forEach(id => {
+        const p = positions[id];
+        p.vx += (W/2 - p.x) * 0.005;
+        p.vy += (H/2 - p.y) * 0.005;
+        p.vx *= 0.85; p.vy *= 0.85;
+        p.x += p.vx; p.y += p.vy;
+        p.x = Math.max(40, Math.min(W - 40, p.x));
+        p.y = Math.max(40, Math.min(H - 40, p.y));
+      });
+    }
+  }
+  simulate();
+
+  function render() {
+    let html = '';
+    // Edges
+    GRAPH_EDGES.forEach(([a, b]) => {
+      const pa = positions[a], pb = positions[b];
+      const isActive = currentNodeId && (a === currentNodeId || b === currentNodeId);
+      html += `<line x1="${pa.x}" y1="${pa.y}" x2="${pb.x}" y2="${pb.y}" stroke="${isActive ? '#00f5d4' : '#2a2a32'}" stroke-width="${isActive ? 1.5 : 0.6}" opacity="${isActive ? 0.9 : 0.7}"/>`;
+    });
+    // Nodes
+    ids.forEach(id => {
+      const p = positions[id];
+      const node = GRAPH_NODES[id];
+      const color = CAT_COLORS[node.cat];
+      const r = currentNodeId === id ? 9 : (isAdjacent(id, currentNodeId) ? 7 : 5.5);
+      const opacity = !currentNodeId || currentNodeId === id || isAdjacent(id, currentNodeId) ? 1 : 0.35;
+      html += `<g class="g-node" data-id="${id}" style="cursor:pointer" opacity="${opacity}">`;
+      html += `<circle cx="${p.x}" cy="${p.y}" r="${r}" fill="${color}" stroke="${currentNodeId === id ? '#fff' : 'none'}" stroke-width="1.5"/>`;
+      html += `<text x="${p.x}" y="${p.y - r - 6}" fill="#a0a098" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="middle">${node[currentLang]}</text>`;
+      html += `</g>`;
+    });
+    svg.innerHTML = html;
+    // Bind events
+    svg.querySelectorAll('.g-node').forEach(g => {
+      g.addEventListener('click', () => {
+        showNode(g.getAttribute('data-id'));
+      });
+      g.addEventListener('mouseenter', () => g.style.opacity = '1');
+    });
+  }
+
+  function isAdjacent(a, b) {
+    if (!a || !b) return false;
+    return GRAPH_EDGES.some(([x, y]) => (x === a && y === b) || (x === b && y === a));
+  }
+
+  window._graphRender = render;
+  render();
+  // Default selection
+  setTimeout(() => showNode('entropy'), 400);
+})();
+
+function showNode(id) {
+  currentNodeId = id;
+  const node = GRAPH_NODES[id];
+  if (!node) return;
+  document.getElementById('node-detail-cat').textContent = CAT_LABEL[node.cat][currentLang];
+  document.getElementById('node-detail-name').textContent = node[currentLang];
+  document.getElementById('node-detail-desc').textContent = node.desc[currentLang];
+  // Adjacent nodes
+  const neighbors = GRAPH_EDGES
+    .filter(([a, b]) => a === id || b === id)
+    .map(([a, b]) => a === id ? b : a);
+  const neighborHTML = neighbors.map(n => `<span data-id="${n}">${GRAPH_NODES[n][currentLang]}</span>`).join('');
+  const linksLabel = currentLang === 'zh' ? '邻接 / ' : 'ADJACENT / ';
+  document.getElementById('node-detail-links').innerHTML = `<div style="margin-bottom:8px">${linksLabel}${neighbors.length}</div>${neighborHTML}`;
+  document.querySelectorAll('#node-detail-links span').forEach(s => {
+    s.addEventListener('click', () => showNode(s.getAttribute('data-id')));
+  });
+  if (window._graphRender) window._graphRender();
+}
+
+// ============== DEPTH MODULE ==============
+const DEPTH_CONCEPTS = {
+  entropy: {
+    label: { en: 'ENTROPY · 熵', zh: '熵 · ENTROPY' },
+    levels: {
+      en: [
+        "Mess. Once you've spilled the marbles, they almost never roll back into the box on their own.",
+        "Entropy is a count of how many ways a system can be arranged while still looking the same. More ways = higher entropy = more 'spread out'.",
+        "Entropy S = k·ln(W), where W is the number of microstates corresponding to a given macrostate. The Second Law: in an isolated system, S only increases.",
+        "Statistical entropy quantifies missing information about a system's microstate given its macrostate. Connects directly to Shannon entropy: H(X) = -Σ p(x) log p(x).",
+        "S = -k_B Σ p_i ln p_i (Gibbs). For a closed equilibrium system, p_i ∝ exp(-βE_i) (canonical ensemble). The arrow of time emerges from coarse-graining a unitary evolution onto macroscopic observables; see Liouville's theorem and the H-theorem."
+      ],
+      zh: [
+        "乱。弹珠一旦撒了一地，几乎不可能自己滚回盒子里。",
+        "熵是在'看起来一样'的前提下，系统可以有多少种排列方式的计数。方式越多 = 熵越高 = 越'摊开'。",
+        "S = k·ln(W)，其中 W 是某宏观态对应的微观态数目。第二定律：孤立系统中，S 只增不减。",
+        "统计熵量化了在已知宏观态条件下，对系统微观态的'未知量'。它直接对应香农熵：H(X) = -Σ p(x) log p(x)。",
+        "S = -k_B Σ p_i ln p_i（吉布斯公式）。封闭平衡系统中，p_i ∝ exp(-βE_i)（正则系综）。时间之箭来自将么正演化粗粒化到宏观可观测量上；参见刘维尔定理与 H 定理。"
+      ]
+    }
+  },
+  recursion: {
+    label: { en: 'RECURSION · 递归', zh: '递归 · RECURSION' },
+    levels: {
+      en: [
+        "It's when something contains a smaller version of itself. Like Russian dolls inside Russian dolls.",
+        "A recursion is when you solve a problem by solving a smaller version of the same problem, then combining the answer.",
+        "A recursive function calls itself with a smaller input, and a base case stops it. e.g. factorial(n) = n × factorial(n−1), with factorial(0) = 1.",
+        "Recursion is the operational counterpart of induction. Any total recursive function over N can be written as a primitive or μ-recursive scheme; corecursion handles infinite codata structures.",
+        "Equivalently, a fixed point of the functional ψ → F(ψ). In typed λ-calculus, recursion is encoded by a Y combinator (or fix); in System F it requires impredicative quantification or an explicit fixed-point operator. Termination ↔ well-founded order on the recursion measure."
+      ],
+      zh: [
+        "就是某样东西里装着一个更小的自己，像俄罗斯套娃里还有套娃。",
+        "递归就是：要解一个问题，先解一个更小的同样问题，再把答案拼回来。",
+        "递归函数会用更小的输入调用自己，靠基线条件停下来。例如 factorial(n) = n × factorial(n−1)，且 factorial(0) = 1。",
+        "递归是归纳法的操作对应物。任何 N 上的全递归函数都可写成原始递归或 μ 递归形式；余递归（corecursion）则处理无限余数据结构。",
+        "等价地说，是泛函 ψ → F(ψ) 的不动点。在带类型 λ 演算中，递归通过 Y 组合子（或 fix）编码；在 System F 中，它要么需要非谓词量化，要么需要显式不动点算子。终止性 ↔ 递归度量的良序关系。"
+      ]
+    }
+  },
+  emergence: {
+    label: { en: 'EMERGENCE · 涌现', zh: '涌现 · EMERGENCE' },
+    levels: {
+      en: [
+        "Lots of small things together do something none of them can do alone — like ants making a colony.",
+        "Emergence is when the whole behaves in ways you'd never predict by looking at the pieces one by one.",
+        "An emergent property is a feature of a system that is not present in any of its components, and that arises only at the level of their interaction (consciousness, market prices, life).",
+        "Strong emergence: irreducible high-level laws, causally efficacious downward. Weak emergence: in-principle reducible but computationally intractable to derive bottom-up.",
+        "Formally, given a microstate space M and macro-observable map π: M → A, emergence ≡ macro-laws on A that are not analytically derivable from micro-dynamics on M, even with full knowledge of initial conditions. Cf. universality classes in critical phenomena and the renormalization group."
+      ],
+      zh: [
+        "很多小东西凑在一起会做出没有一个能单独做的事——像蚂蚁聚成蚁群。",
+        "涌现就是：整体表现出的行为，你单看每一个部件都猜不到。",
+        "涌现性质是系统层面才出现的特征，在任何单个部件中都不存在，仅在它们的交互层级浮现（意识、市场价格、生命）。",
+        "强涌现：高层规律不可还原，且具有向下因果效力。弱涌现：原则上可还原，但从微观自下而上推导在计算上不可行。",
+        "形式化地，设微观态空间 M 与宏观可观测映射 π: M → A，涌现 ≡ A 上的宏观规律无法从 M 上的微观动力学解析地推出，即使初始条件已知。参见临界现象中的普适类与重整化群。"
+      ]
+    }
+  },
+  algorithm: {
+    label: { en: 'ALGORITHM · 算法', zh: '算法 · ALGORITHM' },
+    levels: {
+      en: [
+        "A recipe — but for any kind of problem, not just cooking.",
+        "An algorithm is a list of clear steps that always finishes and always gives an answer for any valid input.",
+        "Formally: a finite, deterministic, terminating sequence of operations that maps inputs to outputs solving a class of problems.",
+        "Equivalently a partial function f: Σ* → Σ* computable by a Turing machine. Resource analyzed by complexity (time, space, communication, query).",
+        "More abstractly, an algorithm is a method for traversing a state space S under a transition relation R until a goal predicate G holds. Correctness = (∀ input) traversal terminates in a state satisfying G ∧ post-condition. Complexity = bounds on the trajectory length as a function of input size."
+      ],
+      zh: [
+        "一种食谱——只不过用来解任何问题，不只是做饭。",
+        "算法就是一组清晰的步骤，对任何合法输入都能跑完，并给出答案。",
+        "形式化：有限的、确定性的、必定终止的操作序列，将输入映射到输出，求解一类问题。",
+        "等价地，是一个图灵机可计算的偏函数 f: Σ* → Σ*。其资源消耗由复杂度刻画（时间、空间、通信、查询）。",
+        "更抽象地，算法是在状态空间 S 上，依据转移关系 R 的一种遍历方法，直到目标谓词 G 成立。正确性 = （对任一输入）遍历终止于满足 G ∧ 后置条件的状态。复杂度 = 轨迹长度随输入规模的上界。"
+      ]
+    }
+  },
+  category: {
+    label: { en: 'CATEGORY · 范畴', zh: '范畴 · CATEGORY' },
+    levels: {
+      en: [
+        "A way of drawing things and arrows between them, where arrows can be glued together.",
+        "It's a kind of map: dots (objects) connected by arrows (morphisms) you can chain.",
+        "A category C consists of: objects, arrows between them, an identity arrow on each object, and an associative composition of arrows.",
+        "Categories abstract structure-preserving maps. Functors map between categories; natural transformations between functors. Most of mathematics has a categorical formulation.",
+        "Formally, a category C is a tuple (Ob(C), Hom(C), ∘, id) where ∘: Hom(B,C) × Hom(A,B) → Hom(A,C) is associative and id_X acts as left/right identity. Categories themselves form 2-categories; their natural-transformation algebra grounds higher category theory and homotopy type theory."
+      ],
+      zh: [
+        "一种把东西画出来、再用箭头连起来的方法，而且箭头可以接在一起。",
+        "它像一张地图：点（对象）之间用可以前后接起来的箭头（态射）相连。",
+        "范畴 C 包含：对象集合、对象之间的态射、每个对象上的恒等态射、以及态射之间满足结合律的复合。",
+        "范畴抽象出'保持结构的映射'。函子在范畴之间映射，自然变换在函子之间映射。绝大多数数学结构都有范畴化的表述。",
+        "形式化地，范畴 C 是元组 (Ob(C), Hom(C), ∘, id)，其中 ∘: Hom(B,C) × Hom(A,B) → Hom(A,C) 满足结合律，id_X 作为左右单位。范畴本身又组成 2-范畴；其自然变换的代数构成高阶范畴论与同伦类型论的基础。"
+      ]
+    }
+  }
+};
+
+let currentDepthConcept = 'entropy';
+let currentDepthLevel = 1;
+
+function renderDepth() {
+  // Picker
+  const picker = document.getElementById('depth-concept-picker');
+  picker.innerHTML = Object.entries(DEPTH_CONCEPTS).map(([k, v]) =>
+    `<button class="depth-pick ${k === currentDepthConcept ? 'active' : ''}" data-concept="${k}">${v.label[currentLang]}</button>`
+  ).join('');
+  picker.querySelectorAll('.depth-pick').forEach(b => {
+    b.addEventListener('click', () => {
+      currentDepthConcept = b.getAttribute('data-concept');
+      renderDepth();
+    });
+  });
+  // Display
+  const c = DEPTH_CONCEPTS[currentDepthConcept];
+  document.getElementById('depth-concept-name').textContent = c.label[currentLang];
+  const text = c.levels[currentLang][currentDepthLevel];
+  const textEl = document.getElementById('depth-text');
+  textEl.textContent = text;
+  textEl.classList.toggle('is-formal', currentDepthLevel >= 4);
+  // Meta
+  const lvlNames = currentLang === 'zh'
+    ? ['儿童（5岁）', '好奇者', '本科生', '从业者', '研究者']
+    : ['Child (age 5)', 'Curious adult', 'Undergraduate', 'Practitioner', 'Researcher'];
+  const tokenCount = Math.round(text.length / (currentLang === 'zh' ? 1.5 : 4.2));
+  document.getElementById('depth-meta').textContent =
+    `L${currentDepthLevel} · ${lvlNames[currentDepthLevel]} · ~${tokenCount} ${currentLang === 'zh' ? 'tokens' : 'tokens'}`;
+}
+
+document.querySelectorAll('.depth-btn').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.depth-btn').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    currentDepthLevel = parseInt(b.getAttribute('data-depth'), 10);
+    renderDepth();
+  });
+});
+
+// ============== CROSS-DOMAIN ==============
+const CROSS_PATTERNS = [
+  {
+    label: { en: 'Equilibrium', zh: '平衡' },
+    iso: { en: '⇆ A balance of opposing forces / fluxes / preferences ⇆', zh: '⇆ 对立的力 / 流动 / 偏好之间的平衡 ⇆' },
+    cards: [
+      { domain: { en: 'PHYSICS', zh: '物理' }, c: { en: 'Thermal Equilibrium', zh: '热平衡' }, d: { en: 'Two systems in contact reach a state where heat flows in both directions equally — temperatures equalize.', zh: '两个相接的系统达到一种状态，热量双向均衡流动——温度趋于相等。' } },
+      { domain: { en: 'ECONOMICS', zh: '经济学' }, c: { en: 'Market Equilibrium', zh: '市场均衡' }, d: { en: 'Supply equals demand at a price where buyers want to buy exactly as much as sellers want to sell.', zh: '在某价格下，供给等于需求——买家想买的恰好等于卖家想卖的。' } },
+      { domain: { en: 'BIOLOGY', zh: '生物学' }, c: { en: 'Homeostasis', zh: '稳态' }, d: { en: 'A living system maintains internal variables (temperature, pH, glucose) within tight bounds via negative feedback.', zh: '生命系统通过负反馈把内部变量（温度、pH、血糖）维持在狭窄区间。' } }
+    ]
+  },
+  {
+    label: { en: 'Optimization under constraint', zh: '约束下的最优化' },
+    iso: { en: '⇆ Maximize an objective subject to budget / energy / fitness limits ⇆', zh: '⇆ 在预算 / 能量 / 适应度限制下最大化一个目标函数 ⇆' },
+    cards: [
+      { domain: { en: 'PHYSICS', zh: '物理' }, c: { en: 'Principle of Least Action', zh: '最小作用量原理' }, d: { en: 'Nature picks the path that extremizes an integral S = ∫L dt. Lagrangian mechanics, all of it.', zh: '自然界选择使 S = ∫L dt 取极值的路径。整个拉格朗日力学的根基。' } },
+      { domain: { en: 'ECONOMICS', zh: '经济学' }, c: { en: 'Utility Maximization', zh: '效用最大化' }, d: { en: 'A consumer picks a bundle that maximizes utility U(x) subject to a budget constraint p·x ≤ w.', zh: '消费者在预算约束 p·x ≤ w 下选择能最大化效用 U(x) 的商品组合。' } },
+      { domain: { en: 'BIOLOGY', zh: '生物学' }, c: { en: 'Natural Selection', zh: '自然选择' }, d: { en: 'Populations climb fitness gradients subject to mutation rate, environment, and resource limits.', zh: '种群在突变率、环境与资源约束下，沿适应度梯度上行。' } }
+    ]
+  },
+  {
+    label: { en: 'Network effects', zh: '网络效应' },
+    iso: { en: '⇆ Value scales superlinearly with the number of connected nodes ⇆', zh: '⇆ 价值随相连节点数超线性增长 ⇆' },
+    cards: [
+      { domain: { en: 'TELECOM', zh: '通信' }, c: { en: "Metcalfe's Law", zh: '梅特卡夫定律' }, d: { en: "A network's value scales as ~n² in the number of users — every new user adds an edge to every existing one.", zh: '网络价值约以用户数 n² 增长——每个新用户都为已有用户增添一条边。' } },
+      { domain: { en: 'BIOLOGY', zh: '生物学' }, c: { en: 'Brain Connectivity', zh: '脑连接' }, d: { en: 'Cognitive capacity scales not with neuron count alone, but with the density and topology of synaptic connections.', zh: '认知能力不只随神经元数目增长，更取决于突触连接的密度与拓扑。' } },
+      { domain: { en: 'MARKETS', zh: '市场' }, c: { en: 'Liquidity', zh: '流动性' }, d: { en: 'A market becomes radically more useful as more participants join — order books deepen, spreads tighten.', zh: '随着参与者增多，市场会变得极其有用——订单簿变厚，价差收窄。' } }
+    ]
+  },
+  {
+    label: { en: 'Phase transition', zh: '相变' },
+    iso: { en: '⇆ A continuous parameter pushes the system across a sudden qualitative change ⇆', zh: '⇆ 连续参数推动系统跨越一次突发的质变 ⇆' },
+    cards: [
+      { domain: { en: 'PHYSICS', zh: '物理' }, c: { en: 'Water Freezing', zh: '水结冰' }, d: { en: 'Lower the temperature continuously and at exactly 0°C, liquid water reorganizes discontinuously into ice.', zh: '温度连续下降，到 0°C 时液态水不连续地重组为固态冰。' } },
+      { domain: { en: 'SOCIETY', zh: '社会' }, c: { en: 'Tipping Points', zh: '临界点' }, d: { en: 'Adoption of a behavior grows slowly until ~25% — then it cascades through the population.', zh: '某种行为缓慢扩散，到约 25% 时——会在人群中级联式爆发。' } },
+      { domain: { en: 'NEURAL NETS', zh: '神经网络' }, c: { en: 'Emergent Capabilities', zh: '能力涌现' }, d: { en: 'A model gains qualitatively new abilities (in-context learning, reasoning) when scale crosses a threshold.', zh: '模型规模跨过某阈值后，会获得质上新的能力（上下文学习、推理）。' } }
+    ]
+  }
+];
+
+let currentCrossPattern = 0;
+
+function renderCross() {
+  const picker = document.getElementById('cross-pattern-picker');
+  picker.innerHTML = CROSS_PATTERNS.map((p, i) =>
+    `<button class="depth-pick ${i === currentCrossPattern ? 'active' : ''}" data-i="${i}">${p.label[currentLang]}</button>`
+  ).join('');
+  picker.querySelectorAll('.depth-pick').forEach(b => {
+    b.addEventListener('click', () => {
+      currentCrossPattern = parseInt(b.getAttribute('data-i'), 10);
+      renderCross();
+    });
+  });
+  const p = CROSS_PATTERNS[currentCrossPattern];
+  document.getElementById('cross-grid').innerHTML = p.cards.map(c => `
+    <div class="cross-card">
+      <div class="cross-card-domain">${c.domain[currentLang]}</div>
+      <div class="cross-card-concept">${c.c[currentLang]}</div>
+      <div class="cross-card-desc">${c.d[currentLang]}</div>
+    </div>
+  `).join('');
+  document.getElementById('cross-isomorphism').textContent = p.iso[currentLang];
+}
+
+// ============== PATHS ==============
+const PATHS = [
+  {
+    title: { en: 'Foundations of Modern Physics', zh: '现代物理基础' },
+    goal: { en: 'GOAL · understand the core laws of how reality is structured', zh: '目标 · 理解现实如何组织的核心定律' },
+    nodes: ['Set', 'Function', 'Group', 'Symmetry', 'Field', 'Energy', 'Thermodynamics', 'Entropy'],
+    nodes_zh: ['集合', '函数', '群', '对称性', '场', '能量', '热力学', '熵'],
+    steps: 8, hours: '~24h'
+  },
+  {
+    title: { en: 'From Logic to Machine Learning', zh: '从逻辑到机器学习' },
+    goal: { en: 'GOAL · trace the lineage from formal computation to modern AI', zh: '目标 · 沿着从形式计算到现代 AI 的脉络走一遍' },
+    nodes: ['Set', 'Function', 'Algorithm', 'Turing Machine', 'Complexity', 'Information', 'Probability', 'Machine Learning'],
+    nodes_zh: ['集合', '函数', '算法', '图灵机', '复杂度', '信息', '概率', '机器学习'],
+    steps: 8, hours: '~28h'
+  },
+  {
+    title: { en: 'The Hard Problems', zh: '硬核问题' },
+    goal: { en: 'GOAL · explore the deepest unresolved questions across science and philosophy', zh: '目标 · 探索科学与哲学中最深的未解之题' },
+    nodes: ['Causation', 'Emergence', 'Reductionism', 'Information', 'Consciousness', 'Knowledge', 'Truth'],
+    nodes_zh: ['因果', '涌现', '还原论', '信息', '意识', '知识', '真'],
+    steps: 7, hours: '~16h'
+  },
+  {
+    title: { en: 'The Shape of Mathematics', zh: '数学的结构' },
+    goal: { en: 'GOAL · see how math itself is organized — from sets to categories', zh: '目标 · 看清数学本身是如何组织的——从集合到范畴' },
+    nodes: ['Set', 'Function', 'Group', 'Topology', 'Category', 'Symmetry'],
+    nodes_zh: ['集合', '函数', '群', '拓扑', '范畴', '对称性'],
+    steps: 6, hours: '~20h'
+  }
+];
+
+function renderPaths() {
+  document.getElementById('paths-list').innerHTML = PATHS.map((p, i) => {
+    const nodes = currentLang === 'zh' ? p.nodes_zh : p.nodes;
+    return `
+      <div class="path-card">
+        <div>
+          <div class="path-meta">PATH · ${String(i + 1).padStart(2, '0')} · ${p.goal[currentLang]}</div>
+          <div class="path-title">${p.title[currentLang]}</div>
+          <div class="path-nodes">${nodes.join(' → ')}</div>
+        </div>
+        <div class="path-stats">
+          <strong>${p.steps}</strong>
+          ${currentLang === 'zh' ? '节点' : 'NODES'}<br>
+          ${p.hours}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ============== COMPRESSION ==============
+const COMPRESS_DATA = {
+  en: [
+    { zoom: 1, label: 'TWEET', tokens: '~12 tokens', text: 'Knowledge has shape. Stop flattening it.' },
+    { zoom: 2, label: 'PARAGRAPH', tokens: '~45 tokens', text: 'Most of what we call "learning resources" force concepts into a line, but real understanding is a graph: nodes, edges, depths, and paths. Knowledge OS makes that structure first-class.' },
+    { zoom: 3, label: 'PAGE', tokens: '~140 tokens', text: 'A textbook chapter or a lecture series is one path through a much larger graph of concepts. The author chose where to start, what to skip, and how deep to go — and you inherit those choices whether they fit you or not. Knowledge OS inverts this. Concepts are nodes, relations are typed edges, and every node has a depth dial. You pick the entry point, the depth, and the traversal. The system maintains coherence between depth levels and across domains, so you can compress, expand, and jump without losing your place.' },
+    { zoom: 4, label: 'CHAPTER', tokens: '~480 tokens', text: 'The dominant interface for human knowledge has been the page — a flat, ordered sequence of words optimized for the printing press, then ported nearly unchanged to the web. The page is good at one thing: serializing a single author\'s thread of thought. It is bad at almost everything else: at showing what is connected, at letting the reader change altitude, at exposing alternative paths, at adapting to the reader\'s background, at compressing the same content into a one-line summary or expanding a one-line summary into a chapter on demand. Knowledge OS treats every concept as a node in a typed graph. Edges have meaning (prerequisite, instance-of, dual, analogy, contradicts). Each node carries content at five resolutions: child-level metaphor, curious-adult intuition, undergraduate definition, practitioner working knowledge, and researcher-grade formalism. Multiple curated paths can traverse the same node, and the reader can fork their own. The system also exposes cross-domain isomorphisms — when the same abstract pattern shows up in physics, economics, biology, and ML, those instances are linked, so understanding one transfers structurally to the others. The result is not a better book; it is a different medium entirely — closer to a microscope than a magazine.' },
+    { zoom: 5, label: 'PROOF', tokens: '~720 tokens', text: 'Definition. A Knowledge OS instance K is a tuple (N, E, D, Π, ι) where:\n  · N is a finite set of concept nodes\n  · E ⊆ N × N × T is a set of typed edges over a finite type vocabulary T = {prereq, instance, dual, analogy, contradicts, ...}\n  · D = {0, 1, 2, 3, 4} is the depth lattice (totally ordered)\n  · Π : N × D × L → Σ* is a content map yielding a string in language L ∈ {en, zh}\n  · ι : Π × D → Π is a coherence operator s.t. ∀ n ∈ N, d ≤ d′ ∈ D: ι(Π(n, d′), d) ≃ Π(n, d) (compression preserves meaning up to ≃)\nAxioms.\n  (A1) Connectivity: the directed graph (N, E) restricted to type prereq is a DAG.\n  (A2) Depth monotonicity: |Π(n, d)| is monotonically non-decreasing in d.\n  (A3) Cross-domain analogy: for any analogy edge (n₁, n₂, analogy) ∈ E, there exists a structure-preserving partial map between their respective subgraphs of prereq edges.\nA learning path is a walk W = ⟨n₁, ..., n_k⟩ in (N, E) such that prereq(n_{i-1}, n_i) holds for all i. A reading is a pair (W, d) selecting a depth for each node. Compression and expansion are queries (W, d) → Σ* parameterized over the depth lattice. By A2 and the existence of ι, any such reading admits a coherent re-rendering at any other depth, in either language.' }
+  ],
+  zh: [
+    { zoom: 1, label: '推文', tokens: '~12 tokens', text: '知识是有结构的。别再把它压成一条线了。' },
+    { zoom: 2, label: '段落', tokens: '~45 tokens', text: '我们称为"学习资料"的东西，多数都把概念硬塞成一条线，但真正的理解是一张图：节点、边、深度、路径。知识操作系统让这张结构成为一等公民。' },
+    { zoom: 3, label: '一页', tokens: '~140 tokens', text: '一本教材的某一章，或者一门课的一整个系列，其实只是一张更大概念图上的一条路径。作者替你决定了从哪里开始、跳过哪些内容、深入到什么程度——不管这适不适合你，你都得照单全收。知识操作系统把这件事反过来：概念是节点，关系是带类型的边，每个节点都有深度旋钮。入口、深度与遍历由你选择。系统在不同深度与不同领域之间维持一致性，让你可以压缩、展开、跳跃，而不会迷失方向。' },
+    { zoom: 4, label: '章节', tokens: '~480 tokens', text: '人类知识长期占主导的界面是"页"——一段为印刷机优化的、扁平的、有序的文字序列，后来几乎原封不动地搬到了网页上。页擅长一件事：把一位作者的思路串成线。它对几乎其他所有事都不擅长：它无法展示什么和什么相关，无法让读者切换高度，无法暴露其他可选路径，无法适配读者的背景，也无法在你需要时把同一份内容压成一行摘要、或把一行摘要展成一整章。知识操作系统把每个概念视为带类型图谱中的节点。边是有含义的（前置、实例、对偶、类比、矛盾）。每个节点承载五种分辨率的内容：儿童比喻、好奇成年人直觉、本科定义、从业者工作知识、研究者级形式化。多条精选路径可以穿过同一个节点，读者也可以分叉出自己的路径。系统还会暴露跨领域同构——当同一种抽象模式在物理、经济、生物与机器学习中重复出现时，它们会被相互链接，于是理解其一就在结构上传递给其他。最终结果不是一本更好的书；而是一种完全不同的媒介——更像显微镜，而不像杂志。' },
+    { zoom: 5, label: '证明', tokens: '~720 tokens', text: '定义。一个知识操作系统实例 K 是元组 (N, E, D, Π, ι)，其中：\n  · N 是有限的概念节点集\n  · E ⊆ N × N × T 是带类型的边集，类型集 T = {前置, 实例, 对偶, 类比, 矛盾, …}\n  · D = {0, 1, 2, 3, 4} 是全序的深度格\n  · Π : N × D × L → Σ* 是内容映射，输出语言 L ∈ {en, zh} 下的字符串\n  · ι : Π × D → Π 是一致性算子，满足 ∀ n ∈ N, d ≤ d′ ∈ D: ι(Π(n, d′), d) ≃ Π(n, d)（压缩在 ≃ 意义下保意）\n公理。\n  (A1) 连通性：图 (N, E) 限制在 prereq 类型边上构成 DAG。\n  (A2) 深度单调性：|Π(n, d)| 关于 d 单调非递减。\n  (A3) 跨域类比：对任一类比边 (n₁, n₂, analogy) ∈ E，其各自前置子图之间存在保结构的部分映射。\n学习路径是 (N, E) 中的游走 W = ⟨n₁, …, n_k⟩，对所有 i 满足 prereq(n_{i-1}, n_i)。一次阅读 (Reading) 是为每个节点选定深度的对 (W, d)。压缩与展开是参数化于深度格的查询 (W, d) → Σ*。由 A2 与 ι 的存在性，任一阅读都可在任何其他深度、任一语言下被一致地重新渲染。' }
+  ]
+};
+
+function renderCompress() {
+  const data = COMPRESS_DATA[currentLang];
+  document.getElementById('compress-stack').innerHTML = data.map(d => `
+    <div class="compress-row" data-zoom="${d.zoom}">
+      <div class="compress-zoom">L${d.zoom} · ${d.label}</div>
+      <div class="compress-content">${d.text}</div>
+      <div class="compress-tokens">${d.tokens}</div>
+    </div>
+  `).join('');
+}
+
+// ============== INIT ==============
+applyLang('en');
+</script>
+</body>
+</html>
